@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@layer base {
+  @font-face {
+    font-family: 'Vazir';
+    src: url(./fonts/Vazir.ttf);
+  }
+}
+
+@layer base {
+  @font-face {
+    font-family: 'sans';
+    src: url(./fonts/sans.ttf);
+  }
+}
+
+:root,
+html,
+body {
+  font-family: sans;
+  direction: rtl;
+  margin: auto;
+}
+
+.main-body {
+  background-image: url('../app/images/bg.jpg');
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+}
