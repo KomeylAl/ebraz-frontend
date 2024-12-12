@@ -27,7 +27,7 @@ const AddAdmin = () => {
     try {
       setIsLoading(true);
       const response = await axios.post(
-        "http://127.0.0.1:8000/api/admins/add",
+        `${process.env.NEXT_PUBLIC_BACKEND_API_URL}api/admins/add`,
         {
           'name': name,
           'phone': phone,

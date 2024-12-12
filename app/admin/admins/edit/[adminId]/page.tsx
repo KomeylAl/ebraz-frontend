@@ -15,7 +15,7 @@ interface EditAdminsPageProps {
   }
 }
 
-const EditAdmins: React.FC<EditAdminsPageProps> = ({ params }) => {
+const EditAdmins = ({ params }: EditAdminsPageProps) => {
 
   const [admins, setAdmins] : any = useState({})
   const [name, setName] = useState('');
@@ -24,28 +24,50 @@ const EditAdmins: React.FC<EditAdminsPageProps> = ({ params }) => {
   const [birthDate, setBirthDate] = useState('');
   const [password, setPassword] = useState('');
 
-  const [errors, setErrors] : any = useState();
-
   const [isLoading, setIsLoading] = useState(false);
+  const [isAdminLoading, setIsAdminLoading] = useState(false);
 
   const router = useRouter();
   const token = getCookie('token')?.toString();
 
+  // let admin: any
+  // await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_API_URL}api/admins/${params.adminId}`, {
+  //   headers: {
+  //     Accept: "application/json",
+  //     "Content-Type": "application/json",
+  //     Authorization: `Bearer ${token}`,
+  //   },
+  // })
+  // .then(function (response) {
+  //   admin = response.data
+  // })
+  // .catch(function (error) {
+  //   console.log(error)
+  //   retur
+  // })
+
   useEffect(() => {
     const getAdmins = async (adminId: string) => {
-      const response = await axios.get(`http://127.0.0.1:8000/api/admins/${adminId}`,{
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      console.log(response.data)
-      setAdmins(response.data[0])
-      setName(response.data[0].name)
-      setAddress(response.data[0].address)
-      setPhone(response.data[0].phone)
-      setBirthDate(response.data[0].birth_date)
+      setIsAdminLoading(true)
+      try {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_API_URL}api/admins/${adminId}`,{
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        console.log(response.data)
+        setAdmins(response.data[0])
+        setName(response.data[0].name)
+        setAddress(response.data[0].address)
+        setPhone(response.data[0].phone)
+        setBirthDate(response.data[0].birth_date)
+        setIsAdminLoading(false)
+      } catch(e: any) {
+        console.log(e.toString())
+        setIsAdminLoading(false)
+      }
     }
 
     getAdmins(params.adminId)
@@ -55,7 +77,7 @@ const EditAdmins: React.FC<EditAdminsPageProps> = ({ params }) => {
     try {
       setIsLoading(true);
       const response = await axios.patch(
-        `http://127.0.0.1:8000/api/admins/${params.adminId}/edit`,
+        `${process.env.NEXT_PUBLIC_BACKEND_API_URL}api/admins/${params.adminId}/edit`,
         {
           'name': name || admins.name,
           'phone': phone || admins.phone,
@@ -70,27 +92,26 @@ const EditAdmins: React.FC<EditAdminsPageProps> = ({ params }) => {
           },
         }
       )
-      console.log(response.data)
       if (response.status === 200) {
         router.push('/admin/admins')
       }
     } catch (error: any) {
       console.log(error, "ADMINS_EDIT_ERROR");
-      setErrors(error.response.data.errors)
       console.log(error)
       setIsLoading(false)
     }
   }
 
-  const renderErrors = (field: any) =>
-    errors?.[field]?.map((error: any, index: any) => (
-      <div key={index} className="text-red-600">
-        {error}
-      </div>
-  ));
-
   const handleBirthDateChange = (value: any) => {
     setBirthDate(value.toString())
+  }
+
+  if (isAdminLoading) {
+    return (
+      <div className='flex items-center justify-center'>
+        در حال دریافت اطلاعات
+      </div>
+    )
   }
 
   return (
@@ -160,15 +181,9 @@ const EditAdmins: React.FC<EditAdminsPageProps> = ({ params }) => {
         >
           ویرایش اطلاعات
         </div>
-        <div className="mt-9 text-red-600">
-          <p>{renderErrors("name")}</p>
-          <p>{renderErrors("address")}</p>
-          <p>{renderErrors("phone")}</p>
-          <p>{renderErrors("birth_date")}</p>
-        </div>
       </div>
     </div>
   )
 }
 
-export default EditAdmins
+export default EditAdmins;

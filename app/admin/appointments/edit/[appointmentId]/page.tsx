@@ -26,6 +26,7 @@ const AppointmentEdit: React.FC<AppointmentEditPageProps> = ({ params }) => {
   const [time, setTime] = useState("");
 
   const [isLoading, setIsLoading] = useState(false);
+  const [pageLoading, setPageLoading] = useState(false);
   const [errors, setErrors]: any = useState();
 
   const router = useRouter();
@@ -177,9 +178,11 @@ const AppointmentEdit: React.FC<AppointmentEditPageProps> = ({ params }) => {
   };
 
   useEffect(() => {
+    setPageLoading(true);
     getAppointment(params.appointmentId);
     getClients();
     getDoctors();
+    setPageLoading(false);
   }, [params.appointmentId]);
 
   doctors.map((doctor: any) => {
@@ -215,6 +218,10 @@ const AppointmentEdit: React.FC<AppointmentEditPageProps> = ({ params }) => {
   const handleAmountStatusChange = (selectedOption: any) => {
     setAmountStatus(selectedOption.value);
   };
+
+  if (pageLoading) {
+    return <div>Loading...</div>
+  }
 
   return (
     <div className="w-full h-full flex flex-col">
