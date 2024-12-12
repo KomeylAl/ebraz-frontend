@@ -1,3 +1,5 @@
+import AdminEditComp from "@/app/admin/_components/AdminEditComp";
+import Header from "@/app/admin/_components/Header";
 import axios from "axios";
 import { getCookie } from "cookies-next";
 import { cookies } from "next/headers";
@@ -27,12 +29,14 @@ export default async function EditAdmins({ params }: EditAdminsPageProps) {
       }
     )
     .then(function (response) {
-      console.log(response.data);
       admin = response.data;
     })
     .catch(function (error) {
       console.log(error);
+      return
     });
 
-  return <div>{admin[0].name}</div>;
+  return ( 
+    <AdminEditComp data={admin[0]} token={token?.value} />
+  );
 }
