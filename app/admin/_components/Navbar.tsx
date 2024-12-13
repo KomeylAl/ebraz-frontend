@@ -9,8 +9,13 @@ import { IoPerson } from "react-icons/io5";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { getCookie } from "cookies-next";
+import { getUserData } from "@/actions/admin-actions";
 
-const Navbar = () => {
+interface NavbarProps {
+  user: any
+}
+
+const Navbar = ({ user }: NavbarProps) => {
   const links = [
     {
       title: "داشبورد",
@@ -57,35 +62,43 @@ const Navbar = () => {
   ];
 
   const pathName = usePathname();
-  const [user, setUser]: any = useState({});
-  const userToken = getCookie("token");
+  // const [user, setUser]: any = useState({});
+  // const userToken = getCookie("token");
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_BACKEND_API_URL}api/user-info`,
-          {
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${userToken}`,
-            },
-          }
-        );
-        if (response.status === 200) {
-          setUser(response.data);
-        }
-        if (response.status === 401) {
+  // useEffect(() => {
+  //   const fetchUserData = async () => {
+  //     try {
+  //       const response = await axios.get(
+  //         `${process.env.NEXT_PUBLIC_BACKEND_API_URL}api/user-info`,
+  //         {
+  //           headers: {
+  //             Accept: "application/json",
+  //             "Content-Type": "application/json",
+  //             Authorization: `Bearer ${userToken}`,
+  //           },
+  //         }
+  //       );
+  //       if (response.status === 200) {
+  //         setUser(response.data);
+  //       }
+  //       if (response.status === 401) {
 
-        }
-      } catch (e: any) {
-        console.log(e.toString());
-      }
-    };
+  //       }
+  //     } catch (e: any) {
+  //       console.log(e.toString());
+  //     }
+  //   };
 
-    fetchUserData();
-  }, [userToken]);
+  //   fetchUserData();
+  // }, [userToken]);
+
+  if (!user) {
+    return (
+      <div>
+        احراز هویت انجام نشد دوباره تلاش کنید
+      </div>
+    )
+  }
 
   return (
     <div className="flex flex-col gap-4 w-full">

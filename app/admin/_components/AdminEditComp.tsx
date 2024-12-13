@@ -72,7 +72,7 @@ const AdminEditComp = ({ data, token }: AdminEditCompProps) => {
 
   return (
     <div className="w-full h-full flex flex-col">
-      <Header pageTitle="ویرایش اطلاعات ادمین" />
+      {/* <Header pageTitle="ویرایش اطلاعات ادمین" /> */}
       <div className="w-full h-full p-8 flex flex-col">
         <div className="w-full flex gap-3 mt-9">
           <div className="w-full">
