@@ -8,6 +8,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import Header from "./Header";
+import dynamic from "next/dynamic";
 
 interface AdminEditCompProps {
   data: any;
@@ -62,6 +63,12 @@ const AdminEditComp = ({ data, token }: AdminEditCompProps) => {
       })
       .finally(() => setIsLoading(false));
   };
+
+  if (!data) {
+    return (
+      <div>در حال دریافت اطلاعات</div>
+    )
+  }
 
   return (
     <div className="w-full h-full flex flex-col">

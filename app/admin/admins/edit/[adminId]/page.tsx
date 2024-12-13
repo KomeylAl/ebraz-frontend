@@ -1,7 +1,5 @@
-import AdminEditComp from "@/app/admin/_components/AdminEditComp";
-import Header from "@/app/admin/_components/Header";
 import axios from "axios";
-import { getCookie } from "cookies-next";
+import dynamic from "next/dynamic";
 import { cookies } from "next/headers";
 import React from "react";
 
@@ -10,6 +8,8 @@ interface EditAdminsPageProps {
     adminId: number;
   };
 }
+
+const AdminEditComp = dynamic(() => import('@/app/admin/_components/AdminEditComp'), { ssr: true });
 
 export default async function EditAdmins({ params }: EditAdminsPageProps) {
   
